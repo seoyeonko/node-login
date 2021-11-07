@@ -12,6 +12,7 @@ app.set('views', './src/views');
 app.set('view engine', 'ejs');
 
 // use: 미들웨어 등록 메서드
+app.use(express.static(`${__dirname}/src/public`)); // __dirname: app.js 위치 반환
 app.use('/', home);
 
 module.exports = app;
