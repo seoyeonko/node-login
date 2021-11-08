@@ -1,5 +1,7 @@
 'use strict';
 
+const UserStorage = require('../../models/UserStorage');
+
 const output = {
   home: (req, res) => {
     res.render('home/index');
@@ -9,31 +11,25 @@ const output = {
   },
 };
 
-// 인증을 위한 데이터
-const users = {
-  id: ['apple', 'orange', 'banana'],
-  psword: ['1234', '1234', '123456'],
-};
-
 const process = {
   login: (req, res) => {
     const id = req.body.id,
       psword = req.body.psword;
 
-    console.log(id, psword);
+    const users = UserStorage.getUsers('id', 'psword'); // UserStoarage 클래스의 id, psword 필드에 접근
+
+    const response = {}; // Object
     if (users.id.includes(id)) {
       const idx = users.id.indexOf(id);
       if (users.psword[idx] === psword) {
-        return res.json({
-          success: true,
-        });
+        response.success = true; // { success: true }
+        return res.json(response);
       }
     }
 
-    return res.json({
-      success: false,
-      msg: '로그인에 실패하셨습니다.',
-    });
+    response.success = false; // { success: false }
+    response.msg = '로그인에 실패하셨습니다.'; // { success: false, msg : '실패' }
+    return res.json(response);
   },
 };
 
